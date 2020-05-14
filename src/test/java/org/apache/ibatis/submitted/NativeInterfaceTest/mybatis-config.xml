@@ -8,7 +8,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 			<transactionManager type="JDBC">
 				<property name="" value="" />
 			</transactionManager>
-			<dataSource type="UNPOOLED">
+			<dataSource type="POOLED">
 				<property name="driver" value="org.hsqldb.jdbcDriver" />
 				<property name="url" value="jdbc:hsqldb:mem:basetest" />
 				<property name="username" value="sa" />

@@ -15,13 +15,23 @@
  */
 package org.apache.ibatis.submitted.basetest;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.Reader;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.BaseDataTest;
+import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -41,6 +51,17 @@ class BaseTest {
     BaseDataTest.runScript(sqlSessionFactory.getConfiguration().getEnvironment().getDataSource(),
             "org/apache/ibatis/submitted/basetest/CreateDB.sql");
   }
+  
+  static void setUp2() throws Exception {
+	    // create an SqlSessionFactory
+	    try (Reader reader = Resources.getResourceAsReader("org/apache/ibatis/submitted/basetest/mybatis-config2.xml")) {
+	      sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+	    }
+
+	    // populate in-memory database
+	    BaseDataTest.runScript(sqlSessionFactory.getConfiguration().getEnvironment().getDataSource(),
+	            "org/apache/ibatis/submitted/basetest/CreateDB.sql");
+	  }
 
   @Test
   void shouldGetAUser() {
@@ -60,6 +81,42 @@ class BaseTest {
       user.setName("User2");
       mapper.insertUser(user);
     }
+  }
+  
+  @Ignore
+  void usePoolConection() throws Exception {
+
+	  PooledDataSource dsDataSource = (PooledDataSource) sqlSessionFactory.getConfiguration().getEnvironment().getDataSource();
+	  List<Connection> connections = new ArrayList<>();
+      for (int i = 0; i < 3; i++) {
+        connections.add(dsDataSource.getConnection());
+      }
+      assertEquals(3, dsDataSource.getPoolState().getActiveConnectionCount());
+      for (Connection c : connections) {
+        c.close();
+      }
+      connections.add(dsDataSource.getConnection());
+      assertEquals(2, dsDataSource.getPoolState().getIdleConnectionCount());
+	  setUp2();
+  }
+  
+ 
+  @Ignore
+  void usePoolConection2() throws Exception {
+	  try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+	      sqlSession.close();
+	    }
+	  PooledDataSource dsDataSource = (PooledDataSource) sqlSessionFactory.getConfiguration().getEnvironment().getDataSource();
+	  List<Connection> connections = new ArrayList<>();
+      for (int i = 0; i < 11; i++) {
+        connections.add(dsDataSource.getConnection());
+      }
+     
+      connections.add(dsDataSource.getConnection());
+      assertEquals(0, dsDataSource.getPoolState().getIdleConnectionCount());
+      assertEquals(10, dsDataSource.getPoolState().getActiveConnectionCount());
+      assertEquals(null, connections.get(11));
+	  setUp2();
   }
 
 }

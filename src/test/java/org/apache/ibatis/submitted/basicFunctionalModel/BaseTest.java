@@ -10,11 +10,13 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.mysql.cj.Session;
+
 
 class BaseTest {
 
@@ -67,7 +69,7 @@ class BaseTest {
   }
   
   @Test
-  void shouldGetAUserUsingCustomFunction() throws Exception {
+  void shoutldGetAUserUsingCustomFunction() throws Exception {
 	setUp();
     try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
     	UserMapper usermapper = sqlSession.getMapper(UserMapper.class);
