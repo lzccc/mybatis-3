@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.mysql.cj.log.Log;
+import static org.mockito.Mockito.*;
 
 
 class BaseTest {

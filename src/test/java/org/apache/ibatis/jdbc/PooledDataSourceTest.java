@@ -90,6 +90,13 @@ class PooledDataSourceTest extends BaseDataTest {
     JDBCConnection realConnection = (JDBCConnection) PooledDataSource.unwrapConnection(c);
     c.close();
   }
+  
+  @Test
+  void ShouldReturnRealConnectionDummyTest() throws Exception {
+    PooledDataSource ds = createPooledDataSource(JPETSTORE_PROPERTIES);
+    JDBCConnection realConnection = (JDBCConnection) ds.unwrapConnectionDummy();
+    ds.getConnection().close();
+  }
 
   @Disabled("See the comments")
   @Test

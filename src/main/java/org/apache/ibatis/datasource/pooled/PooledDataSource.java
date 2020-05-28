@@ -593,6 +593,16 @@ public class PooledDataSource implements DataSource {
     }
     return conn;
   }
+  
+  public Connection unwrapConnectionDummy() throws SQLException {
+	  Connection conn = this.getConnection();
+	    if (Proxy.isProxyClass(conn.getClass())) {
+	      InvocationHandler handler = Proxy.getInvocationHandler(conn);	      
+	      return ((PooledConnection) handler).getRealConnection();
+	    }
+	    return conn;
+  }
+  
 
   @Override
   protected void finalize() throws Throwable {
