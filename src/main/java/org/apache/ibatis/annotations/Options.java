@@ -100,7 +100,7 @@ public @interface Options {
   int timeout() default -1;
 
   /**
-   * Returns whether use the generated keys feature supported by JDBC 3.0
+   * Returns whether use the generated keys feature supported by JDBC 3.0.
    *
    * @return {@code true} if use; {@code false} if otherwise
    */
