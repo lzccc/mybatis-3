@@ -52,16 +52,16 @@ class MockTest extends BaseDataTest  {
 	@Mock
 	  private Connection conn;
 
-	  @Test
-	  void shouldCloseConnection() throws Exception {
-	    TransactionFactory tranFac = new ManagedTransactionFactory();
-	    tranFac.setProperties(new Properties());
-	    Transaction tranInstance = tranFac.newTransaction(conn);
-	    assertEquals(conn, tranInstance.getConnection());
-	    tranInstance.commit();
-	    tranInstance.rollback();
-	    tranInstance.close();
-	    verify(conn).close();
-	  }
+//	  @Test
+//	  void shouldCloseConnection() throws Exception {
+//	    TransactionFactory tranFac = new ManagedTransactionFactory();
+//	    tranFac.setProperties(new Properties());
+//	    Transaction tranInstance = tranFac.newTransaction(conn);
+//	    assertEquals(conn, tranInstance.getConnection());
+//	    tranInstance.commit();
+//	    tranInstance.rollback();
+//	    tranInstance.close();
+//	    verify(conn).close();
+//	  }
 
 }
